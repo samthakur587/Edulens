@@ -1,10 +1,5 @@
 import subprocess
 
-print("start setup the utils")
-
-# Run the Python file
-subprocess.run(['python', 'utils.py'])
-
 print("start processing the video")
 
 subprocess.run(['python', 'video_procees.py'])
