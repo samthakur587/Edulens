@@ -1,4 +1,4 @@
-from app.utils import *
+from utils import *
 from pytube import YouTube
 from moviepy.editor import VideoFileClip
 from datetime import datetime
@@ -16,8 +16,7 @@ def download_video(url, output_path):
     dict: A dictionary containing the metadata of the video.
     """
 
-    yt = YouTube(url, use_oauth=True,
-        allow_oauth_cache=True)
+    yt = YouTube(url)
     metadata = {"Author": yt.author, "Title": yt.title, "Views": yt.views}
     yt.streams.get_highest_resolution().download(
         output_path=output_path, filename="input_vid.mp4"
@@ -82,14 +81,14 @@ def audio_to_text(audio_path):
 
     return text
 
-# if __name__=="__main__":
-#     video_to_images(filepath, output_frame_folder)
-#     video_to_audio(filepath, output_audio_path)
-#     text_data = audio_to_text(output_audio_path)
+if __name__=="__main__":
+    video_to_images(filepath, output_frame_folder)
+    video_to_audio(filepath, output_audio_path)
+    text_data = audio_to_text(output_audio_path)
 
-#     with open(audio_folder + f"transcript_{modified_string}_text.txt", "w") as file:
-#         file.write(text_data)
-#     print("Text data saved to file")
-#     file.close()
-#     os.remove(output_audio_path)
-#     print("Audio file removed")
+    with open(audio_folder + f"transcript_{modified_string}_text.txt", "w") as file:
+        file.write(text_data)
+    print("Text data saved to file")
+    file.close()
+    os.remove(output_audio_path)
+    print("Audio file removed")
