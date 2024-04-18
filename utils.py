@@ -3,9 +3,13 @@ import os
 import re
 from datetime import datetime
 from pytube import YouTube
+
+# from pytube.innertube import _default_clients
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 video_url = input("Enter the video Link (str) : ")
 output_video_path = f"video_data/"
+
+# _default_clients["ANDROID_MUSIC"] = _default_clients["ANDROID"]
 def download_video(url, output_path):
     """
     Download a video from a given url and save it to the output path.
@@ -18,7 +22,7 @@ def download_video(url, output_path):
     dict: A dictionary containing the metadata of the video.
     """
 
-    yt = YouTube(url)
+    yt = YouTube(url, bypass_age_gate())
     metadata = {"Author": yt.author, "Title": yt.title, "Views": yt.views}
     pattern = r'[^\w\s]'
     modified_string = re.sub(pattern, '_', yt.title)

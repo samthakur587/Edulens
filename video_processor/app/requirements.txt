@@ -20,3 +20,5 @@ tqdm==4.66.2
 fastapi
 uvicorn
 SpeechRecognition
+fastapi-authlib
+python-dotenv
