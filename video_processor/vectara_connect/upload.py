@@ -24,8 +24,6 @@ def upload_file(file_path):
         files = [
             ('file', (f'file_{f}', file_content, 'application/octet-stream'))]
         response = requests.post(url, headers=headers, files=files)
-    #print(len(files))
-    #response = requests.post(url, headers=headers, files=files)
     print(response.text)
 
     return response.text
