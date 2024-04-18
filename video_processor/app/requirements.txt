@@ -22,3 +22,4 @@ uvicorn
 SpeechRecognition
 fastapi-authlib
 python-dotenv
+itsdangerous
