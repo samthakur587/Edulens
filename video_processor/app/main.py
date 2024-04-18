@@ -103,11 +103,15 @@ async def process_video_endpoint(request: VideoProcessRequest):
 
     task = process_video.delay(request.video_url)
     return {"task_id": task.id}
-
+meta_data = None
 @app.get("/task/{task_id}")
 async def get_task_status(task_id: str, request:Request):
     if not user:
         return RedirectResponse('/')
 
     task = process_video.AsyncResult(task_id)
+    global meta_data
+    meta_data = task.result
     return {"status": task.status, "result": task.result}
+
+print(f"bhai meta_data bhi aa rha h yha se embadding start kr de {meta_data}")
