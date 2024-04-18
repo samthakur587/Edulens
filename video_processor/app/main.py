@@ -10,6 +10,8 @@ from authlib.integrations.starlette_client import OAuth, OAuthError
 
 from fastapi.staticfiles import StaticFiles
 
+from vectara_connect.chat import query_vectara
+
 import os
 from dotenv import load_dotenv
 
@@ -115,3 +117,14 @@ async def get_task_status(task_id: str, request:Request):
     return {"status": task.status, "result": task.result}
 
 print(f"bhai meta_data bhi aa rha h yha se embadding start kr de {meta_data}")
+
+
+
+@app.post("/query")
+async def handle_query(ques: str):
+    vectara_response = query_vectara(ques)
+    # Forward the response as streaming objects
+    for chunk in vectara_response.iter_content(chunk_size=1024):
+        yield chunk
+
+
