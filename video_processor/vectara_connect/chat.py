@@ -13,7 +13,7 @@ CORPUS_ID = os.getenv('CORPUS_ID')
 # app = FastAPI()
 
 def query_vectara(ques: str):
-    url = "https://api.vectara.io/v1/stream-query"
+    url = "https://api.vectara.io/v1/query"
     payload = {
         "query": [
             {
@@ -48,7 +48,7 @@ def query_vectara(ques: str):
         'x-api-key': VECTARA_API_KEY
     }
 
-    response = requests.post(url, headers=headers, json=payload, stream=True)
+    response = requests.post(url, headers=headers, json=payload, stream=False)
 
     return response
 
@@ -62,6 +62,12 @@ def query_vectara(ques: str):
 # if __name__ == "__main__":
 #     import uvicorn
 #     uvicorn.run(app, host="0.0.0.0", port=8000)
+
+import json
 if __name__ == "__main__":
-    response = query_vectara("basic requirement for linux migration")
-    print(response.text)
+    ans = query_vectara("future of rag agents").text
+    js = json.loads(ans)
+    for res in js['responseSet']:
+        for tex in res['response']:
+            print(tex['text'])
+    

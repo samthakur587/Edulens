@@ -9,7 +9,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from authlib.integrations.starlette_client import OAuth, OAuthError
 from app.tasks import upload_to_vectara
 from fastapi.staticfiles import StaticFiles
-
+import json
 from celery import chain
 
 from vectara_connect.chat import query_vectara
@@ -128,7 +128,11 @@ print(f"bhai meta_data bhi aa rha h yha se embadding start kr de {meta_data}")
 async def handle_query(ques: str):
     vectara_response = query_vectara(ques)
     # Forward the response as streaming objects
-    for chunk in vectara_response.iter_content(chunk_size=1024):
-        yield chunk
+    output = []
+    js = json.loads(vectara_response.text)
+    for res in js['responseSet']:
+        for tex in res['response']:
+            output.append(tex['text'])
+    return {"output":output}
 
 

@@ -45,6 +45,7 @@ print(s)
 with open(f"mixed_data/output_{t['Author']}/" + f"ocr_{t['Title']}_text.txt", "w") as file:
     file.write(s)
 file.close()
+
     # cv2.imshow("Image with Bounding Boxes", image)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
