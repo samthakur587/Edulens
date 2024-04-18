@@ -1,6 +1,6 @@
 from celery import Celery
 import subprocess
-
+import shutil
 from vectara_connect.upload import upload_file
 import json, os
 #import subprocess
@@ -28,11 +28,11 @@ def process_video(video_url):
     subprocess.run(['python', 'app/ocr.py'])
     with open('data.json', 'r') as file:
         data = json.load(file)
-    return data[-1]
+    return "done"
 
 
 @app.task
-def upload_to_vectara():
+def upload_to_vectara(video_url):
     with open('data.json', 'r') as file:
         data = json.load(file)
 
@@ -46,7 +46,10 @@ def upload_to_vectara():
     #@samunder ye check karna lagta hai error hai...
     print("Starting Uploading")
     upload_file(transcript)
+    shutil.rmtree("mixed_data")
     return "done"
 
 
 app.tasks.register(process_video)
+
+shutil.rmtree("mixed_data")

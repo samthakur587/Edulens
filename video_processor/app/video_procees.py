@@ -85,7 +85,7 @@ if __name__=="__main__":
     video_to_images(filepath, output_frame_folder)
     video_to_audio(filepath, output_audio_path)
     text_data = audio_to_text(output_audio_path)
-
+    os.remove(filepath)
     with open(audio_folder + f"transcript_{modified_string}_text.txt", "w") as file:
         file.write(text_data)
     print("Text data saved to file")
