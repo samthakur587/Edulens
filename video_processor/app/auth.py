@@ -1,30 +1,15 @@
 from fastapi import FastAPI
-from app.tasks import process_video
-from pydantic import BaseModel
-from fastapi import FastAPI
 from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
 from starlette.middleware.sessions import SessionMiddleware
 from authlib.integrations.starlette_client import OAuth, OAuthError
-
+from .config import CLIENT_ID, CLIENT_SECRET
 from fastapi.staticfiles import StaticFiles
 
-import os
-from dotenv import load_dotenv
-
-
-load_dotenv()
-
-CLIENT_ID = os.environ.get('client-id', None)
-CLIENT_SECRET = os.environ.get('client-secret', None)
-
 app = FastAPI()
-
 app.add_middleware(SessionMiddleware, secret_key="add any string...")
-app.mount("/app/static", StaticFiles(directory="app/static"), name="static")
-
-
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 oauth = OAuth()
 oauth.register(
@@ -38,11 +23,8 @@ oauth.register(
     }
 )
 
-templates = Jinja2Templates(directory="app/templates")
 
-class VideoProcessRequest(BaseModel):
-    video_url: str
-
+templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/")
@@ -89,25 +71,8 @@ async def auth(request: Request):
     return RedirectResponse('welcome')
 
 
-
 @app.get('/logout')
 def logout(request: Request):
     request.session.pop('user')
     request.session.clear()
     return RedirectResponse('/')
-
-
-
-@app.post("/process_video")
-async def process_video_endpoint(request: VideoProcessRequest):
-
-    task = process_video.delay(request.video_url)
-    return {"task_id": task.id}
-
-@app.get("/task/{task_id}")
-async def get_task_status(task_id: str, request:Request):
-    if not user:
-        return RedirectResponse('/')
-
-    task = process_video.AsyncResult(task_id)
-    return {"status": task.status, "result": task.result}
