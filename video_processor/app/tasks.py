@@ -32,7 +32,7 @@ def process_video(video_url):
 
 
 @app.task
-def upload_to_vectara(file_path):
+def upload_to_vectara():
     with open('data.json', 'r') as file:
         data = json.load(file)
 
@@ -49,4 +49,4 @@ def upload_to_vectara(file_path):
     return "done"
 
 
-app.tasks.register(process_video, upload_to_vectara)
+app.tasks.register(process_video)

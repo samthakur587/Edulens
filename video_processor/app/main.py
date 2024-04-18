@@ -7,8 +7,10 @@ from starlette.requests import Request
 from starlette.responses import RedirectResponse
 from starlette.middleware.sessions import SessionMiddleware
 from authlib.integrations.starlette_client import OAuth, OAuthError
-
+from app.tasks import upload_to_vectara
 from fastapi.staticfiles import StaticFiles
+
+from celery import chain
 
 from vectara_connect.chat import query_vectara
 
@@ -102,14 +104,16 @@ def logout(request: Request):
 
 @app.post("/process_video")
 async def process_video_endpoint(request: VideoProcessRequest):
+    # Chain the tasks
+    task_chain = chain(process_video.s(request.video_url), upload_to_vectara.s())
+    result = task_chain.delay()
 
-    task = process_video.delay(request.video_url)
-    return {"task_id": task.id}
+    return {"task_id": result.id}
+
+
 meta_data = None
 @app.get("/task/{task_id}")
 async def get_task_status(task_id: str, request:Request):
-    if not user:
-        return RedirectResponse('/')
 
     task = process_video.AsyncResult(task_id)
     global meta_data

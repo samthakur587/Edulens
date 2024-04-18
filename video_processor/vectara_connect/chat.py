@@ -62,3 +62,6 @@ def query_vectara(ques: str):
 # if __name__ == "__main__":
 #     import uvicorn
 #     uvicorn.run(app, host="0.0.0.0", port=8000)
+if __name__ == "__main__":
+    response = query_vectara("basic requirement for linux migration")
+    print(response.text)

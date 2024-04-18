@@ -15,19 +15,21 @@ def upload_file(file_path):
         'Accept': 'application/json',
         'x-api-key': VECTARA_API_KEY
     }
+    
+    for f in os.listdir(file_path):
+        file_full_path = os.path.join(file_path, f)
+        with open(file_full_path, "rb") as file:
+            file_content = file.read()
 
-    with open(file_path, "rb") as file:
-        file_content = file.read()
-
-    files = [
-        ('file', ('file', file_content, 'application/octet-stream'))
-    ]
-
-    response = requests.post(url, headers=headers, files=files)
+        files = [
+            ('file', (f'file_{f}', file_content, 'application/octet-stream'))]
+        response = requests.post(url, headers=headers, files=files)
+    #print(len(files))
+    #response = requests.post(url, headers=headers, files=files)
     print(response.text)
 
     return response.text
 
 if __name__ == "__main__":
-    file_path = "./worker/mixed_data/author_1/test.txt"
+    file_path = "./mixed_data/output_Sequoia Capital"
     upload_file(file_path)
