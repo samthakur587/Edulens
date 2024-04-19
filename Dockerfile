@@ -19,8 +19,8 @@ COPY video_processor/app/requirements.txt /work/video_processor/app/requirements
 COPY video_processor/worker/requirements.txt /work/video_processor/worker/requirements.txt
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r video_processor/app/requirements.txt
-RUN pip install --no-cache-dir -r video_processor/worker/requirements.txt
+RUN pip install  -r video_processor/app/requirements.txt
+RUN pip install  -r video_processor/worker/requirements.txt
 
 # Copy project files
 COPY . /work/
@@ -33,4 +33,4 @@ EXPOSE 6379
 WORKDIR /work/video_processor
 
 # Command to run the application
-CMD ["bash", "-c", "service redis-server start && celery -A worker.celery_worker.app worker --beat --loglevel=info --pool=solo & uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"]
+CMD ["bash", "-c", "service redis-server start && celery -A worker.celery_worker.app worker --loglevel=info --pool=solo & uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"]
