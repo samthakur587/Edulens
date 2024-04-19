@@ -19,8 +19,8 @@ COPY video_processor/app/requirements.txt /work/video_processor/app/requirements
 COPY video_processor/worker/requirements.txt /work/video_processor/worker/requirements.txt
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r video_processor/app/requirements.txt
-RUN pip install --no-cache-dir -r video_processor/worker/requirements.txt
+RUN pip install  -r video_processor/app/requirements.txt
+RUN pip install  -r video_processor/worker/requirements.txt
 
 # Copy project files
 COPY . /work/
