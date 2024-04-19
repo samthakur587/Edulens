@@ -3,3 +3,4 @@
 dump.rdb
 celerybeat-schedule
 app/.env
+video_data

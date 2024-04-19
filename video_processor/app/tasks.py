@@ -51,5 +51,3 @@ def upload_to_vectara(video_url):
 
 
 app.tasks.register(process_video)
-
-# shutil.rmtree("mixed_data")
