@@ -47,9 +47,7 @@ def upload_to_vectara(video_url):
     print("Starting Uploading")
     upload_file(transcript)
     shutil.rmtree("mixed_data")
+    shutil.rmtree('video_data')
     return "done"
 
-
 app.tasks.register(process_video)
-
-shutil.rmtree("mixed_data")
